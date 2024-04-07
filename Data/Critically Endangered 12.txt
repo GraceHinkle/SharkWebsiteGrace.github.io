@@ -1,0 +1,6 @@
+Critically Endangered: 12
+Endangered: 17
+Vulnerable: 25
+Near threatened: 15
+Least Concern: 66
+Data Deficient: 22

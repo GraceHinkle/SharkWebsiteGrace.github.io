@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+
+<script>
+
+  // set the dimensions and margins of the graph
+  var margin = {top: 30, right: 30, bottom: 100, left: 350},
+      width = 950 - margin.left - margin.right,
+      height = 700 - margin.top - margin.bottom;
+  
+  // append the svg object to the body of the page
+  var svg = d3.select("#my_dataviz")
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")")
+  
+  // Add the grey background that makes ggplot2 famous
+  svg
+    .append("rect")
+      .attr("x",0)
+      .attr("y",0)
+      .attr("height", height)
+      .attr("width", height)
+      .style("fill", "EBEBEB")
+  
+  //Read the data
+  //d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function(data) {
+
+    let data = [
+        {
+            "Shark": "Whitefin Sharksucker",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Live Sharksucker",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Tope",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Bluntnose Sixgill Shark",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Nervous Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Blacktip Reef Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Portuguese Dogfish",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Speartooth Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Megamouth Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Creek Whaler",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Blacktip Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Pacific Nurse Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Bonnethead Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Whitetip Reef Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Tiger Shark",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Basking Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Grey Reef Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Horn Shark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Northern River Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Indonesian Angel Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Eastern Angel Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Black Dogfish",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Velvet Belly Lantern Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Birdbeak Dogfish",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Longnose Velvet Dogfish",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "White Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Zebra Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Spiny Dogfish",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Great Lanternshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Spined Pymy Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Caribbean Roughshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Galapagos Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Graceful Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Whale Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Starry Smoothhound",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Bull Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Scalloped Hammerhead",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "White Ghost Catshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Spotted Gully Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Porbeagle",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Great Hammerhead",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Blue Shark",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Chilean Catshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Smooth Hammerhead",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Caribbean Reef Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Iceland Catshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Blackmouth Catshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Greenland Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Pyjama Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Increasing"
+        },
+        {
+            "Shark": "Nursehound",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Mouse Catshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Sand Tiger Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Fleshynose Catshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Angular Roughshark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Broadnose Sevengill Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Atlantic Sixgill Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Sharpnose Sevengill Shark",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Whitespotted Bullhead Shark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Bigeyed Sixgill Shark",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Southern African Frilled Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Japanese Bullhead Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Mexican Horn Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Port jackson Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "African Dwarf Sawshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Frilled Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Borneo Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Blackmouth Lanternshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Brown Lanternshark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Whitetail Dogfish",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Marsha's Lanternshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Lined Lanternshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Whitecheek Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Blacknose Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Pacific Smalltail Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Sherwoods Dogfish",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Densescale Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Oman Bullhead Shark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Crested Horn Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Blurred Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Rasptooth Dogfish",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Sparsetooth Dogfish",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Green Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Increasing"
+        },
+        {
+            "Shark": "Broadnose Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Hawaiian Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Galapagos Bullhead Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Fatspine Spurdog",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Phillipine Spurdog",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Sandbar Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Pocket Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "West Indian Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Smiths Spurdog",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Dusky Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Combtooth Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Indonesian Whaler Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Pink Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Barries Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Humans Whaler Shark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Lailas Lantern Shark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Ninja Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Dwarf Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Lemon Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Blind Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Prickly Shark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Short-tailed Lantern Shark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Black-tailed Spurdog",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Highfin Dogfish",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Pondicherry Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Genies Dogfish",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Spadenose Shark",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Edmunds Spurdog",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Shortnose Spurdog",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Increasing"
+        },
+        {
+            "Shark": "Seychelles Spurdog",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Bighead Spurdog",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Shortfin Smooth Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Ganges Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Silky Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Roughskin Dogfish",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Southern Mandarin Shark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Eastern Highfin Spurdog",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Copper Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Vari's Angel Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Carolina Hammerhead",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Indonesian Shortnose Spurdog",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Malagasi Skinny Spurdog",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Brazilian Whitetail Dogfish",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Atlantic Lobefin Dogfish",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Thorny Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Smalleye Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Azores Dogfish",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Sculpted Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Pygmy Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Traveller Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Papuan Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "New Spadenose Shark",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "False Pygmy Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Night Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Greeneye Spurdog",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Western Humpback Dogfish",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Western Highfin Spurdog",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Lost Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Atlantic Sharpnose Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Increasing"
+        },
+        {
+            "Shark": "Shorttail Nurse Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Seychelles Gulper Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Splendid Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Oceanic Whitetip Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Lesser Sand Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Blackbelly Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Australian Blackspot Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Slendertail Lantern Shark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Eastern Longnose Spurdog",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Western Longnose Spurdog",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Kermadec Spiny Dogfish",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Taiwan Angelshark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Ocellated Angelshark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Blackfin Gulper Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Longfin Gulper Shark",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Hooktooth Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Mandarin Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Cylindrical Lantern Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Taiwan Spurdog",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Bartail Spurdog",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Baret'z Dogfish",
+            "Endangerment": "Near Threatened",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Hawaiian Spurdog",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Whitetip Weasel Shark",
+            "Endangerment": "Vulnerable",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Cailliet's Angelshark",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Australian Blacktip Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Australian Sharpnose Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Northeastern Brazillian Dogfish",
+            "Endangerment": "Data Deficiant",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Japanese Spurdog",
+            "Endangerment": "Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Daggernose Shark",
+            "Endangerment": "Critically Endangered",
+            "Growth Rates": "Decreasing"
+        },
+        {
+            "Shark": "Viper Dogfish",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Western Angelshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Undefined"
+        },
+        {
+            "Shark": "Australian Angelshark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            "Shark": "Ornate Angel Shark",
+            "Endangerment": "Least Concern",
+            "Growth Rates": "Stable"
+        },
+        {
+            Shark: "Longfin Mako",
+            Endangerment: "Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Longnose Spurdog",
+            Endangerment: "Data Deficiant",
+            Growth_Rates: "Undefined"
+        },
+        {
+            Shark: "Largetooth Sawfish",
+            Endangerment: "Critically Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Sickelfin Weasel Shark",
+            Endangerment: "Vulnerable",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Whitenose Shark",
+            Endangerment: "Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "African Longnose Spurdog",
+            Endangerment: "Least Concern",
+            Growth_Rates: "Stable"
+        },
+        {
+            Shark: "Western Gulper Shark",
+            Endangerment: "Data Deficiant",
+            Growth_Rates: "Undefined"
+        },
+        {
+            Shark: "Australian Weasel Shark",
+            Endangerment: "Least Concern",
+            Growth_Rates: "Undefined"
+        },
+        {
+            Shark: "Smalleye Pygmy Shark",
+            Endangerment: "Least Concern",
+            Growth_Rates: "Undefined"
+        },
+        {
+            Shark: "Tailspot Lanternshark",
+            Endangerment: "Least Concern",
+            Growth_Rates: "Undefined"
+        },
+        {
+            Shark: "Chilean Angel Shark",
+            Endangerment: "Critically Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "American Pocket Shark",
+            Endangerment: "Least Concern",
+            Growth_Rates: "Stable"
+        },
+        {
+            Shark: "African Gulper Shark",
+            Endangerment: "Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Great White Shark",
+            Endangerment: "Vulnerable",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Bonnethead Shark",
+            Endangerment: "Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Winghead Shark",
+            Endangerment: "Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Scoophead Shark",
+            Endangerment: "Critically Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Scalloped Bonnethead",
+            Endangerment: "Critically Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Smalleye Hammerhead",
+            Endangerment: "Critically Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Silvertip Shark",
+            Endangerment: "Vulnerable",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Bramble Shark",
+            Endangerment: "Endangered",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Bluntnose Spurdog",
+            Endangerment: "Near Threatened",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Spottail Shark",
+            Endangerment: "Near Threatened",
+            Growth_Rates: "Decreasing"
+        },
+        {
+            Shark: "Little Gulper Shark",
+            Endangerment: "Endangered",
+            Growth_Rates: "Decreasing"
+        }
+
+    ]
+  
+    // Add X axis
+    var x = d3.scaleOrdinal().domain(["Undefined", "Decreasing", "Stable", "Increasing"]).range([0, width]);
+
+    svg
+      .append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickSize(-height * 1.3).ticks(4))
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("transform", "rotate(-45)")
+      .attr("dx", "-.8em")
+      .attr("dy", ".15em");
+  
+    // Add Y axis
+    var y = d3
+    .scaleOrdinal()
+    .domain([
+      "Critically Endangered",
+      "Endangered",
+      "Vulnerable",
+      "Near Threatened",
+      "Least Concern",
+      "Data Deficient",
+    ])
+    .range([height, 0]);
+      
+    svg
+      .append("g")
+      .call(d3.axisLeft(y).tickSize(-width * 1.3).ticks(6))
+      .selectAll("text")
+      .style("text-anchor", "end");
+  
+    // Customization
+    svg.selectAll(".tick line").attr("stroke", "white")
+  
+    // Add X axis label:
+    svg
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", width / 2)
+    .attr("y", height + margin.top + 40)
+    .text("Growth Rates");
+
+  // Y axis label:
+  svg
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -margin.left + 20)
+    .attr("x", -height / 2)
+    .text("Endangerment");
+  
+    // Color scale: give me a specie name, I return a color
+    var color = d3.scaleOrdinal()
+      .domain(["Undefined", "Decreasing", "Stable", "Increasing"])
+      .range([ "#F8766D", "#00BA38", "#619CFF", "#00BA38", "#619CFF"])
+  
+    // Add dots
+    svg.append('g')
+      .selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function (d) {
+      return x(d["Growth Rates"]);
+    })
+    .attr("cy", function (d) {
+      return y(d["Endangerment"]);
+    })
+    .attr("r", 5)
+    .style("fill", function (d) {
+      return color(d.Species);
+    });
+        // .attr("cx", function (d) { return x(d.Growth_Rates); } )
+        // .attr("cy", function (d) { return y(d.Endangerment); } )
+        // .attr("r", 5)
+        // .style("fill", function (d) { return color(d.Species) } )
+  
+  </script>

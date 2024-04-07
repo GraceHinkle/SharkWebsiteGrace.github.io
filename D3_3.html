@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+<!-- Create an element where the map will take place -->
+<svg id="my_dataviz"></svg>
+
+<script>
+// The svg
+var svg = d3.select("svg");
+    var width = 2400 //window.innerWidth;
+    var height = 900 //window.innerHeight;
+    svg.attr("width", width).attr("height", height);
+
+// Map and projection
+var path = d3.geoPath();
+var projection = d3.geoMercator()
+  .scale(100)
+  .center([0, 20])
+  .translate([width / 5, height / 3]);
+
+// Data and color scale
+var data = d3.map();
+var colorScale = d3.scaleThreshold()
+  .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
+  .range(d3.schemeBlues[7]);
+
+  let sharkData = [
+  
+    {
+        "Rank": "1 Sharkfin exporter",
+        "Country/Territory": "Hong Kong",
+        "Tons per Year": "\"6,556\""
+    },
+    {
+        "Rank": "2 Sharkfin exporter",
+        "Country/Territory": "Thailand",
+        "Tons per Year": "\"3,042\""
+    },
+    {
+        "Rank": "3 Sharkfin exporter",
+        "Country/Territory": "Indonesia",
+        "Tons per Year": "\"1,235\""
+    },
+    {
+        "Rank": "4 Sharkfin exporter",
+        "Country/Territory": "China",
+        "Tons per Year": "\"1,196\""
+    },
+    {
+        "Rank": "5 Sharkfin exporter",
+        "Country/Territory": "Taiwan",
+        "Tons per Year": "\"1,114\""
+    },
+    {
+        "Rank": "1 Sharkfin importer",
+        "Country/Territory": "Hong Kong",
+        "Tons per Year": "\"10,490\""
+    },
+    {
+        "Rank": "2 Sharkfin importer",
+        "Country/Territory": "China",
+        "Tons per Year": "\"2,634\""
+    },
+    {
+        "Rank": "3 Sharkfin importer",
+        "Country/Territory": "Malaysia",
+        "Tons per Year": "\"1,172\""
+    },
+    {
+        "Rank": "4 Sharkfin importer",
+        "Country/Territory": "Singapore",
+        "Tons per Year": "\"1,583\""
+    },
+    {
+        "Rank": "5 Sharkfin importer",
+        "Country/Territory": "Taiwan",
+        "Tons per Year": "681"
+    },
+    {
+        "Rank": "1 SharkM exporter",
+        "Country/Territory": "Taiwan",
+        "Tons per Year": "\"15,785\""
+    },
+    {
+        "Rank": "2 SharkM exporter",
+        "Country/Territory": "Spain",
+        "Tons per Year": "\"15,608\""
+    },
+    {
+        "Rank": "3 SharkM exporter",
+        "Country/Territory": "Uruguay",
+        "Tons per Year": "\"17,223\""
+    },
+    {
+        "Rank": "4 SharkM exporter",
+        "Country/Territory": "Argentina",
+        "Tons per Year": "\"5,720\""
+    },
+    {
+        "Rank": "5 SharkM exporter",
+        "Country/Territory": "Japan",
+        "Tons per Year": "\"4,434\""
+    },
+    {
+        "Rank": "1 SharkM importer",
+        "Country/Territory": "South Korea",
+        "Tons per Year": "\"20,656\""
+    },
+    {
+        "Rank": "2 SharkM importer",
+        "Country/Territory": "Spain",
+        "Tons per Year": "\"14,077\""
+    },
+    {
+        "Rank": "3 SharkM importer",
+        "Country/Territory": "Italy",
+        "Tons per Year": "\"11,526\""
+    },
+    {
+        "Rank": "4 SharkM importer",
+        "Country/Territory": "Brazil",
+        "Tons per Year": "\"20,131\""
+    },
+    {
+        "Rank": "5 SharkM importer",
+        "Country/Territory": "Uruguay",
+        "Tons per Year": "\"21,717\""
+    }
+
+]
+
+function ready(topo) {
+
+  let mouseOver = function (d) {
+    d3.selectAll(".Country")
+      .transition()
+      .duration(200)
+      .style("opacity", .5)
+    d3.select(this)
+      .transition()
+      .duration(200)
+      .style("opacity", 1)
+      .style("stroke", "black")
+  }
+
+  let mouseLeave = function (d) {
+    d3.selectAll(".Country")
+      .transition()
+      .duration(200)
+      .style("opacity", .8)
+    d3.select(this)
+      .transition()
+      .duration(200)
+      .style("stroke", "transparent")
+  }
+
+        // create a tooltip
+        var Tooltip = d3.select("#my_dataviz")
+        .append("div")
+        .style("font-family", "Fantasy") //no font originally, is now somehow impact
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px")
+
+  // Draw the map
+  svg.append("g")
+    .selectAll("path")
+    .data(topo.features)
+    .enter()
+    .append("path")
+    .attr("d", d3.geoPath().projection(projection))
+    .attr("fill", function (d) {
+      d.total = data.get(d.id) || 0;
+      return colorScale(d.total);
+    })
+    .style("stroke", "transparent")
+    .attr("class", function (d) { return "Country"; })
+    .style("opacity", .8)
+    .on("mouseover", mouseOver)
+    .on("mouseleave", mouseLeave);
+  }
+</script>

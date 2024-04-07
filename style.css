@@ -1,0 +1,156 @@
+body {
+    background-image: linear-gradient( aqua, darkblue);
+  }
+  @media only screen and (min-width: 768px) { 
+  /**media query**/
+  }
+  h1 {
+      margin-top: 3%;
+      font-size: 250%;
+      font-family: Helvetica;
+      color: darkblue;
+      text-align: center;
+  }
+  h2 {
+      font-size: 175%;
+      font-family: Helvetica;
+      color: darkblue;
+      text-align: center;
+  }
+  p {
+      color: aquamarine;
+      text-align: center;
+     
+  }
+  td {
+    border: 1px solid black;
+    }
+    
+
+  svg {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    
+        overflow-x: scroll;
+    }
+
+  ul {
+      position: fixed;
+      top: 0;
+      list-style-type: none;
+      margin-left: 37%;
+      padding: 0;
+      overflow: hidden;
+      background-color: #101124;
+  }
+
+  li {
+      float: left;
+  }
+
+  li a {
+      display: block;
+      color: rgb(252, 154, 25);
+      text-align: center;
+      font-family: Tahoma;
+      padding: 5px 10px;
+      
+  }
+  /*iframe{
+      margin-left: 27%;
+      width: 50%;
+      height: 60%;
+  }*/
+  .youtube-video {
+    aspect-ratio: 16 / 9;
+    width: 65%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /*orbs ID's*/
+  #confused {
+    position: absolute;
+    left: 5%;
+    width: 10%;
+    }
+  #anger {
+    position: absolute;
+    left: 45%;
+    width: 10%;
+    }
+  #happy {
+    position: absolute;
+    left: 85%;
+    width: 10%;
+    }   
+
+  /*ID's*/
+  #all {
+    text-align: center;
+  }
+  /*#my_dataviz {
+    width: 50%;
+    height: 50%;
+    }*/
+  /* CLASSes*/
+  .p {
+    background-color: #101124;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+  .p2 {
+    text-decoration-line: bold;
+  }
+  .sharklove {
+    width: 90%;
+    margin-left: 5%;
+  }
+  .Sharkhi {
+    width: 100%;
+  }
+  .dataI {
+    border-radius: 5%;
+    width: 45%;
+    margin-left: 3%;
+  }
+  .triviaT {
+    font-size: 130%;
+    font-style: italic;
+    color: orange;
+  }
+  .triviaI {
+    width: 40%;
+  }
+  .answers {
+    color:rgb(4, 187, 207);
+    font-size: 60%
+  }
+  .answers:hover {
+    color: rgb(49, 141, 0);
+  }
+  .gallery {
+    width: 50%;
+  }
+  .rotate {
+    animation: rotation 6s linear infinite;
+    }
+    @keyframes rotation {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(359deg);
+        }
+    }
+    .rotate:hover {
+        animation: rotation .5s linear infinite;
+    }
+    /*d31*/
+    .node:hover{
+    stroke-width: 7px !important; 
+    opacity: 20 !important;
+    }
